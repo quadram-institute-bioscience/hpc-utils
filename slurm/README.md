@@ -65,14 +65,24 @@ If you want to store your e-mail address as default recipient, simply type the e
 
 `sb.pl -c 6 -h 8 -s samtools-1.5  --run "samtools view -bS aln.sam | samtools sort -@ 6 -o aln.bam -"`
 
-#### To specify requested time
-Use the -d DAYS -h HOURS switces
+#### Dependency chaining
+
+To run a job after the completion of another use `--after JOBID`. Note that `sb.pl` itself will report the JOBID so:
+
+```
+INDEXING_JOB=$(sb.pl "bwa index genome.fa" --run)
+sb.pl --nocheck --run --after $INDEXING_JOB "bwa mem -t $THIS_JOB_CORES genome.fa reads.fq"
+```
 
 #### To use a conda environment
 Place a 'conda_source' file in your home, then use the `--conda` to source it, and finally `-s ENV` to require a specific environmenet
 
 #### To use software installed as modules
 Generally use as many `-s MODULE` switches as needed, they'll be taken from NBI catalogue. Also add `--ei` to switch to EI catalogue
+
+#### To specify requested time
+Use the -d DAYS -h HOURS switces
+
 
 
 ### Logs
